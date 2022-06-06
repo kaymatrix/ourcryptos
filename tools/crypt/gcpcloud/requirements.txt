@@ -1,0 +1,11 @@
+# Function dependencies, for example:
+# package>=version
+requests
+pandas
+tabulate
+BeautifulSoup4
+python-binance
+gmail-connector
+notify-run
+mysql-connector-python
+google-cloud-firestore
