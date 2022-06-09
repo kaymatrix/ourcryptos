@@ -14,8 +14,7 @@ from lib.cryptlibs import actions
 from lib.cryptlibs import rules
 from lib import gcp 
 
-
-forceGCP = 0
+forceGCP = 1
 
 tls.setDebugging()
 tls.setGlobalSwitch('forceGCP', forceGCP)

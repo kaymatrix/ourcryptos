@@ -206,7 +206,7 @@ class CryptDataSupport():
             
         lst = []
         for each in workOnList:
-            if each.percentage_change > 0:
+            if each.percent_change > 0:
                 lst.append(each)
         return lst
 
@@ -216,7 +216,7 @@ class CryptDataSupport():
             
         lst = []
         for each in workOnList:
-            if each.percentage_change < 0:
+            if each.percent_change < 0:
                 lst.append(each)
         return lst
     
@@ -329,7 +329,7 @@ class CryptEntrySupport():
                     ce.entrydate = eachTopper.entrydate
                     ce.entrytime = eachTopper.entrytime
                     ce.entryprice = eachTopper.price
-                    ce.percent_change = eachTopper.percentage_change
+                    ce.percent_change = eachTopper.percent_change
                     ce.exitdate = ''#tls.getDateCalc(self.rule.waitDuration, '%Y%m%d')
                     ce.targetprice = self._getTargetPrice(ce.entryprice,self.rule.exitPercent) 
                     ce.status = 'waiting'            

@@ -27,7 +27,7 @@ obj = support.CryptDataSupport()
 
 alldates = []
 for each in obj.dbData:
-    tls.info(each.symbol, each.entrydate, each.entrytime, each.percent_change)
+    tls.info(each.symbol, each.entrydate, each.entrytime, each.percent_change, each.
     if not each.entrydate in alldates: alldates.append(each.entrydate)
 
 def _getInfoForDate(date, time):

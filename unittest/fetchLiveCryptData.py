@@ -26,4 +26,4 @@ data = obj.getLiveToppers()
 # chkForDate = tls.getDateCalc(3 * -1,'%Y%m%d')
 #data = obj.filterByDateTime(chkForDate, inputList = data)
 for each in data:
-    tls.info(each.entrydate, each.entrytime, each.symbol, each.percentage_change)
+    tls.info(each.entrydate, each.entrytime, each.symbol, each.percent_change)

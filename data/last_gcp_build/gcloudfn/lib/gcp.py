@@ -148,7 +148,7 @@ if __name__ == '__main__':
         cd.entrytime = dt.split('_')[1]        
         cd.entryprice = info['entryprice']
         
-        cd.percentage_change = info['percentchange']
+        cd.percent_change = info['percentchange']
         cd.status = info['status']
         cd.targetprice = info['targetprice']
         cd.exitdate = info['exitdate']

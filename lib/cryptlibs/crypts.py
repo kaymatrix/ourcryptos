@@ -68,7 +68,7 @@ class CryptsData(object):
             # marketcap    float: 0.06572    
             # marketdom    float: 0.29    %
             # marketrank    int: 24    
-            # percentage_change    float: 1.74844219    
+            # percent_change    float: 1.74844219    
             # price    float: 199.42    
             # slug    str: monero    
             # symbol    str: XMR    
@@ -119,7 +119,7 @@ cd.entrydate =
 cd.entrytime =
 
 cd.price =    
-cd.percentage_change =
+cd.percent_change =
 cd.high24h =
 cd.low24h =
 

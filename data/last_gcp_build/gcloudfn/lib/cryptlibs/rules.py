@@ -55,7 +55,7 @@ class CryptRule_Quick3Percent(object):
         
         #isEntryPercentageOK
         if proceed:
-            if not (self.cd.percentage_change <= self.entryPercent):
+            if not (self.cd.percent_change <= self.entryPercent):
                 tls.info(f'{self.cd.symbol} percentage not ok : {self.cd.percent_change}')
                 proceed = False
                 
