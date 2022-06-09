@@ -8,7 +8,7 @@ https://ctrackfn-yotxvoz5rq-el.a.run.app/?do=fetch&view=1
 https://ctrackfn-yotxvoz5rq-el.a.run.app/?do=fetch&view=1
 https://ctrackfn-yotxvoz5rq-el.a.run.app/?do=verify&view=1
 
-
+https://ctrackfn-yotxvoz5rq-el.a.run.app/?do=test
     
 Name    Region    State    Description    Frequency    Target    Last run    Last run result    Next run    Actions
 EveningRun    asia-south1    Enabled    Evening 6.30pm    30 18 * * * (Asia/Calcutta)    URL : https://ctrackfn-yotxvoz5rq-el.a.run.app/?do=fetch&view=0    5 Jun 2022, 08:40:07    Has not run yet.    5 Jun 2022, 18:30:00        
@@ -35,13 +35,12 @@ Maximum instances
 Service account
 kumarglobal@kaymatrix.iam.gserviceaccount.com
 Build worker pools
-—
+
 Container build log
 e103ba65-d406-426b-9d41-76254f486ae6
 
-
-@author: kayma
 '''
+
 from lib.cryptlibs import actions
 import functions_framework
 
@@ -74,7 +73,7 @@ def ctrackfn(request):
         view = 0
     
     storeToDB = not view
-    if todo == 'test': resp = cobj.helloworld()
+    if todo == 'test': resp = cobj.helloWorld()
     if todo == 'fetch': resp = cobj.getLatestData(fetchGeneralData=1, fetchValidCoins=1, alert=1, storeToDB=storeToDB)
     if todo == 'verify': resp = cobj.checkEntries(alert=1, storeToDB=storeToDB)
        

@@ -21,18 +21,32 @@ class GCPSupport():
             self.gcpkeyfile = 'G:/pythonworkspace/ourcryptos/data/gcp.json' 
             os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = self.gcpkeyfile
         
+        self.forceGCP = 0        
         self.sc = storage.Client()  
-
+        
     def readPickle(self, pickleName, gcpbucket=None):
+        forceGCP = tls.getGlobalSwitch('forceGCP', 0)
         gcpbucket = gcpbucket if gcpbucket else self.gcpbucket
         data = None
         try:
             tls.info(f'GCP: Reading GCP {pickleName}...')
-            bucket = self.sc.bucket(gcpbucket)
-            blob = bucket.blob(pickleName)
-            picks = blob.download_as_string()
-            data = pickle.loads(picks)
-            tls.debug(f'GCP: Pickle read {pickleName}')
+            #InMemoryCheck:
+            if tls.isGlobalVarExist(pickleName):
+                data = tls.getGlobalVar(pickleName)
+                tls.debug(f'GCP: Pickle read {pickleName} from in memory.')
+            else:
+            #InFileCheck:
+                if tls.isLocalDev() and tls.isCacheAvailable(pickleName, dated=1) and not forceGCP: 
+                    data = tls.getCache(pickleName, None, dated=1)
+                    tls.debug(f'GCP: Pickle read {pickleName} from local')
+                else:
+                    bucket = self.sc.bucket(gcpbucket)
+                    blob = bucket.blob(pickleName)
+                    picks = blob.download_as_string()
+                    data = pickle.loads(picks)                
+                    tls.debug(f'GCP: Pickle read {pickleName}')
+                    if tls.isLocalDev(): tls.setCache(pickleName, data, dated=1)
+                tls.setGlobalVar(pickleName, data)
         except Exception as e:
             tls.error(f'GCP Error reading the bucket/pickle: {gcpbucket} or {pickleName} - {e}')
         return data
@@ -44,7 +58,8 @@ class GCPSupport():
             bucket = self.sc.bucket(gcpbucket)
             blob = bucket.blob(pickleName)
             picks = pickle.dumps(data)
-            blob.upload_from_string(picks)             
+            blob.upload_from_string(picks)
+            if tls.isLocalDev(): tls.setCache(pickleName, data, dated=1)      
             tls.debug(f'GCP: Pickle written {pickleName}')            
         except Exception as e:
             tls.error(f'GCP Error: writing the bucket/pickle: {gcpbucket} or {pickleName} - {e}')
@@ -55,9 +70,12 @@ class GCPSupport():
         gcpbucket = gcpbucket if gcpbucket else self.gcpbucket
         data = None
         try:
-            bucket = self.sc.bucket(gcpbucket)
-            blob = bucket.blob(cacheName)
-            return 1 if blob else 0
+            if tls.isLocalDev() and not self.forceGCP:
+                return tls.isCacheAvailable(cacheName, dated=1)
+            else:
+                bucket = self.sc.bucket(gcpbucket)
+                blob = bucket.blob(cacheName)
+                return 1 if blob else 0
         except:
             tls.error(f'GCP Error reading the bucket/cache: {gcpbucket} or {cacheName}')
         return data

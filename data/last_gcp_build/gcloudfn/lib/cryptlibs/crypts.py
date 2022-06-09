@@ -40,6 +40,22 @@ class CryptsEntry(object):
     exitdate = None
     invested = None
     invest_status = None
+
+    def __str__(self): 
+        info = ''
+        info += '\n'
+        info += f'\n\tSymbol: {self.symbol}'
+        info += f'\n\tPercentChange: {self.percent_change}'
+        info += f'\n\tEntryDate: {self.entrydate}'
+        info += f'\n\tEntryTime: {self.entrytime}'
+        info += f'\n\tEntryPrice: {self.entryprice}'
+        info += f'\n\tTargetPrice: {self.targetprice}'
+        info += f'\n\tExitDate: {self.exitdate}'
+        info += f'\n\tStatus: {self.status}'        
+        info += f'\n\tIsInvested: {self.invested}'
+        info += f'\n\tInvestStatus: {self.invest_status}'
+        info += '\n'
+        return info    
        
     
 class CryptsData(object):
@@ -125,7 +141,7 @@ cd.usr_weekcnt =
     entrytime = None
     
     price = None    #
-    percentage_change = None
+    percent_change = None
     high24h = None
     low24h = None
     
@@ -140,3 +156,29 @@ cd.usr_weekcnt =
     usr_react = None
     usr_weekcnt = None
 
+    def __str__(self): 
+        info = ''
+        info += '\n'
+        info += f'\n\t Symbol: {self.symbol}'
+        info += f'\n\t Slug: {self.slug}'
+        info += f'\n\t Price: {self.price}'
+        info += f'\n\t PercentChange: {self.percent_change}'
+        info += f'\n\t EntryDate: {self.entrydate}'
+        info += f'\n\t EntryTime: {self.entrytime}'
+        
+        info += f'\n\t High24h: {self.high24h}'
+        info += f'\n\t Low24h: {self.low24h}'
+        
+        info += f'\n\t Volume24: {self.volume24h}'
+        info += f'\n\t BinVolume: {self.binvolume}'
+        info += f'\n\t TotalVolume: {self.ttlvolume}'
+        
+        info += f'\n\t Market Rank: {self.marketrank}'
+        info += f'\n\t Market Dom: {self.marketdom}'        
+        info += f'\n\t Market Cap: {self.marketcap}'
+        
+        info += f'\n\t Pop_Last2DayUserReact: {self.usr_last2dayscnt}'
+        info += f'\n\t Pop_UserReact: {self.usr_react}'
+        info += f'\n\t Pop_NewsCnt: {self.usr_weekcnt}'
+        info += '\n'
+        return info   

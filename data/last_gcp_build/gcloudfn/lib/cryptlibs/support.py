@@ -180,7 +180,7 @@ class CryptDataSupport():
                 cd.entrytime = tm
                 
                 cd.price = price   
-                cd.percentage_change = perchg
+                cd.percent_change = perchg
                 cd.high24h = high24h
                 cd.low24h = low24h
                 
@@ -196,8 +196,8 @@ class CryptDataSupport():
                 cd.usr_weekcnt = usr_weekcnt
 
                 resp.append(cd)
-                self.currentToppers = resp
-              
+            
+            self.currentToppers = resp              
         return resp
                 
     #Top Gainers

@@ -15,7 +15,8 @@ del /s /q *_slug
 del /s /q GCP_DATA_LIB.py
 del /s /q unittest\*.*
 del /s /q gcp.zip
-d:\7-Zip\7z a gcp.zip * -xr!unittest\*.* 
+del /s /q function-source.zip
+d:\7-Zip\7z a  function-source.zip * -xr!unittest\*.* 
 rmdir G:\pythonworkspace\ourcryptos\data\last_gcp_build /s /q
 xcopy G:\pythonworkspace\ourcryptos\build\ G:\pythonworkspace\ourcryptos\data\last_gcp_build /e/f/c/i/y
 pause

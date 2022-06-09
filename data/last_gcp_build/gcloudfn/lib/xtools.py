@@ -55,7 +55,7 @@ import random
 import shutil
 import sys
 import re
-
+import atexit
 numbers = re.compile('\d+')
 # Include below point in your main and errors will be displayed.
 #sys.excepthook = kmxTools.errorHandler
@@ -69,7 +69,10 @@ def getGlobalTools():
         if hasattr(obj, 'f_locals'):
             vars = obj.f_locals
         else:
-            return Tools()
+            tls = Tools()
+            print('Global Tools Ready! ' + str(tls))
+            return tls
+        #if 'tls' in vars:        
         if '__name__' in vars and vars['__name__'] == '__main__' and 'tls' in vars:
             found = 1
             return vars['tls']
@@ -116,6 +119,9 @@ def errorHandler(etype, value, tb):
     except IOError:
         pass
 
+def exiting():
+    print('-----The End------')
+atexit.register(exiting)
 
 class Tools(object):
     '''
@@ -140,7 +146,11 @@ class Tools(object):
         self.ignoreSysLogger = 0
         
         self.tags = []
+        self.globalVar = {}
+        self.globalSwitch = {}
         
+        self.localCachePath = 'G:/pythonworkspace/ourcryptos/data/cache'
+
         if not 'gmail_user' in os.environ or not 'gmail_pass' in os.environ:
             print('Please set -gmail_user- and -gmail_pass- environment variable to proceed')
             #exit(0) 
@@ -148,12 +158,33 @@ class Tools(object):
             #gmail_pass = '<ACCOUNT_PASSWORD>'
 
         self.setupLogger()
+        self.readyCachePath()
+        
+    def getGlobalVar(self, varName):
+        if self.isGlobalVarExist(varName):
+            return self.globalVar[varName]
     
-    def __del__(self):
-        self.info('End of Program')
+    def setGlobalVar(self, varName, value):
+        self.globalVar[varName]= value
+    
+    def isGlobalVarExist(self, varName):
+        return varName in self.globalVar
+    
+    def getGlobalSwitch(self, varName, default=0):
+        if self.isGlobalVarSwitch(varName):
+            return self.globalSwitch[varName]
+        else:
+            return default
+    
+    def setGlobalSwitch(self, varName, value):
+        self.info(f'Global switch {varName} triggered to {value}')
+        self.globalSwitch[varName]= value
+    
+    def isGlobalVarSwitch(self, varName):
+        return varName in self.globalSwitch    
 
     def helloWorld(self):
-        self.info('Hello World')
+        self.info('Hello World', skipLevel=4)
         
     def setDebugging(self):
         self.logToStream = 1
@@ -178,6 +209,10 @@ class Tools(object):
         m or e
         '''
         return 'm' if self.isItMorning() else 'e'
+    
+    def readyCachePath(self):
+        if self.isLocalDev():
+            self.pathReady(self.localCachePath)
 
     def pathClean(self, inputFile):
         inputFile = os.path.normpath(inputFile)
@@ -192,10 +227,14 @@ class Tools(object):
         Ext = Ext[1:] if Ext.startswith('.') else Ext
         return filePath, fileName, Ext
 
-    def isCacheAvailable(self, fileName):
+    def isCacheAvailable(self, fileName, dated=0):
+        if dated: fileName = self._cacheName(fileName)
+        fileName = self._applyLocalCachePath(fileName)
         return os.path.exists(fileName)
 
-    def getCache(self, fileName, defaultData=None):
+    def getCache(self, fileName, defaultData=None, dated=0):
+        if dated: fileName = self._cacheName(fileName)
+        fileName = self._applyLocalCachePath(fileName)
         if self.isCacheAvailable(fileName):
             self.debug(f'Reading cache {fileName}')
             f = open(fileName, 'rb')
@@ -206,17 +245,22 @@ class Tools(object):
             self.setCache(fileName, defaultData)
             data = defaultData
         return data
-
-    def setCache(self, fileName, data):
+    
+    def setCache(self, fileName, data, dated=0):
+        if dated: fileName = self._cacheName(fileName)
+        fileName = self._applyLocalCachePath(fileName)
         self.debug(f'Writing cache {fileName}')
         picData = pickle.dumps(data)
         f = open(fileName, 'wb')
         f.write(picData)
         f.close()
+    
+    def _applyLocalCachePath(self, fileName):
+        return self.pathJoin(self.localCachePath, fileName)
 
     def _cacheName(self, fileName):
         nw = self.getDateTime('%Y%m%d')
-        cacheName = f'cache_{nw}_{fileName}'
+        cacheName = f'{nw}_{fileName}'
         return cacheName
 
     def storeData(self, fileName, data):
@@ -401,6 +445,8 @@ class Tools(object):
         return "{:.2f}".format(float(price))
 
     def info(self, *msg, skipLevel=2):
+        if skipLevel>2:
+            print('test')
         if type(msg) == type(()):
             lst = []
             for each in msg:

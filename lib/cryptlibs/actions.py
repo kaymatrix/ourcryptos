@@ -155,7 +155,7 @@ class CryptActions(object):
         resp['data']['fail'] = failCnt
         resp['data']['waiting'] = waitingCnt
         
-        if hitCnt > 0 or failCnt > 0 or waitingCnt > 0:
+        if hitCnt > 0 or failCnt > 0:
             if alert:
                 data = self.alertInfo                
                 self.tls.info(data)
